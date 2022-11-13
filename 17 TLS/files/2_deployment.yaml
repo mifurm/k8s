@@ -1,0 +1,32 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: tls-nginx
+spec:
+  selector:
+    matchLabels:
+      run: tls-nginx
+  replicas: 2
+  template:
+    metadata:
+      labels:
+        run: tls-nginx
+    spec:
+      containers:
+      - name: nginx
+        image: cloudstateu/nginx-tls:1
+        ports:
+        - containerPort: 80
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: tls-nginx
+  labels:
+    run: tls-nginx
+spec:
+  ports:
+  - port: 80
+    protocol: TCP
+  selector:
+    run: tls-nginx

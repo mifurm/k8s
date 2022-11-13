@@ -1,0 +1,45 @@
+ssh-keygen -t rsa
+
+az account set --subscription "MichalFurmankiewicz"
+az ad sp create-for-rbac --skip-assignment
+
+#output of SPN
+{
+}
+
+resourceGroup=
+clusterName=
+acrName=
+
+#create the cluster
+az aks get-versions --location westeurope --output table
+az group deployment create --name $clusterName -g $resourceGroup --template-file azure-aks.json --parameters @azure-aks.parameters.json
+
+#install cli and get credentials
+az aks install-cli
+az aks get-credentials -g $resourceGroup -n $clusterName
+
+#apply deployment
+kubectl apply -f .\deployment.yaml
+
+#create ACR and deploy the image
+az acr create -g $resourceGroup -n $acrName --sku Basic
+az acr update -n $clusterName --admin-enabled true
+az acr credential show -n $acrName 
+
+#tag the images
+docker tag nginx-sample mfacr03.azurecr.io/nginx-sample
+docker tag apache-docker mfacr03.azurecr.io/apache-docker
+
+#push the images to repository
+az acr login -n $acrName
+docker push mfacr03.azurecr.io/nginx-sample
+docker push mfacr03.azurecr.io/apache-docker
+
+#create seceret 
+kubectl create secret docker-registry regcred --docker-server=mfacr03.azurecr.io --docker-username=mfacr03 --docker-password=<password> --docker-email=mifurm@cloudarchitects.pl
+
+#scale the deployment
+kubectl apply -f deployment.yaml
+az aks browse --resource-group $resourceGroup --name $clusterName
+kubectl scale --replicas=10 deployment/salesbooklb

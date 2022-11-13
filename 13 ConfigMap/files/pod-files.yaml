@@ -1,0 +1,22 @@
+apiVersion: v1
+kind: Pod
+metadata:
+  name: dapi-test-pod
+spec:
+  containers:
+    - name: test-container
+      image: k8s.gcr.io/busybox
+      command: [ "/bin/sh", "-c", "ls /etc/config/ && sleep 3600" ]
+      volumeMounts:
+      - name: my-config-map-2-volume
+        mountPath: /etc/config/map2
+      - name: my-config-map-3-volume
+        mountPath: /etc/config/map3
+  volumes:
+    - name: my-config-map-2-volume
+      configMap:
+        name: my-config-map-2
+    - name: my-config-map-3-volume
+      configMap:
+        name: my-config-map-3
+  restartPolicy: Never

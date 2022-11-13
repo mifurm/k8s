@@ -1,0 +1,15 @@
+resourceGroup = "mfrg01"
+location = "westeurope"
+clusterName = "aks01"
+registryName = "acr01"
+
+az group create -n $resourceGroup -l westeurope
+az aks create -g $resourceGroup -n $clusterName --generate-ssh-keys --node-vm-size Standard_DS1_v2 --node-count 1 --disable-rbac --no-wait
+az acr create --name $registryName --resource-group $resourceGroup --sku Basic --admin-enabled true --location westeurope
+
+az aks get-credentials --resource-group $resourceGroup --name $clusterName
+az aks browse --resource-group $resourceGroup --name $clusterName
+
+az group delete --name $resourceGroup --no-wait --yes
+
+

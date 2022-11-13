@@ -1,0 +1,17 @@
+apiVersion: cert-manager.io/v1alpha2
+kind: Certificate
+metadata:
+  name: secret1
+spec:
+  secretName: secret1
+  dnsNames:
+  - tls.azure.cloudemo.eu
+  acme:
+    config:
+    - http01:
+        ingressClass: nginx
+      domains:
+      - tls.azure.cloudemo.eu
+  issuerRef:
+    name: letsencrypt-prod
+    kind: Issuer

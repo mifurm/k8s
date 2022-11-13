@@ -1,0 +1,38 @@
+#set context
+az account set --subscription "MPNSub01"
+az account set --subscription "9d4350c8-e11c-4007-a923-c1df11a52bab"
+az aks get-credentials -g mfrg02aks02 -n mfaks03
+
+#set kubectl context
+kubectl config use-context mfaks02
+kubectl config use-context mfaks03
+
+#create PVC
+kubectl apply -f 5.pvcWithDisk/pvc.yaml 
+
+#check PVC
+kubectl get pvc #check the if of the pvc with disk
+
+#check disks in the subscription
+az disk list -o table
+
+#set pod with disk assigned
+kubectl apply -f 5.pvcWithDisk/podWithDisk.yaml
+kubectl get pods
+kubectl describe pod/nginx
+
+#check if the mount data exsists in volume
+kubectl exec -it nginx bash
+kubectl exec -it nginx2 bash
+
+    #create a simple file on the volume to what is happening
+
+#delete pods
+kubectl get pods
+kubectl delete pods/nginx
+kubectl delete pods/nginx2
+
+#create the pod again, connect to pod and check if the volume exists
+
+
+

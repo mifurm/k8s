@@ -1,0 +1,11 @@
+#az aks upgrade --resource-group myResourceGroup --name myAKSCluster --kubernetes-version 1.13.10
+
+az aks browse -n mfaks02 -g mfrg02aks02
+
+az aks get-versions --location westeurope -o table
+
+az aks upgrade --kubernetes-version 1.14.6 -n mfaks02 -g mfrg02aks02
+
+az aks upgrade --resource-group myResourceGroup --name myAKSCluster --kubernetes-version 1.13.10
+
+az aks create -g mfrg02aks02 -n mfaks03 --generate-ssh-keys --node-vm-size Standard_DS1_v2 --node-count 1 --no-wait --enable-cluster-autoscaler --enable-vmss --min-count=1 --max-count=3

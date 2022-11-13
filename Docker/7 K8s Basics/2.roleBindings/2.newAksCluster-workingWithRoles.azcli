@@ -1,0 +1,12 @@
+az account set --subscription "9d4350c8-e11c-4007-a923-c1df11a52bab"
+az group create mfrg02aks02
+az aks create -g mfrg02aks02 -n mfaks02 --generate-ssh-keys --node-vm-size Standard_DS1_v2 --node-count 1 --no-wait
+
+az aks get-credentials -g mfrg02aks02 -n mfaks02 --admin
+az aks get-credentials -g mfrg02aks02 -n mfaks02
+
+#working with roles
+kubectl describe clusterrole/cluster-admin
+kubectl get clusterrolebindings
+kubectl describe clusterrolebindings/contoso-cluster-admins
+kubectl delete clusterrolebinding/contoso-cluster-admins
