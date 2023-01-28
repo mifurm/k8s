@@ -72,7 +72,9 @@ labels:
   app: myapp-2
 ```
 and save the file.
+
 8. Type ``kubectl apply -f pod_definition.yaml`` and press **Enter**.
+
 9. Describe the pod by typing ``kubectl describe pod my-pod`` and check if the definition has changed.
 ![img](./img/pod_definition_changed.png)
 
@@ -94,7 +96,9 @@ And you can even connect to a pod if it has any shell inside the container.
 Now you can execute commands inside a container.
 ![img](./img/connect.png)
 
-4. Delete the pod by executing following command:
+4. Exit the pod by typing `exit`
+
+5. Delete the pod by executing following command:
 ``
 kubectl delete pod my-pod --grace-period=1
 ``
